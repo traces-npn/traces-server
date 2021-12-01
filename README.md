@@ -16,8 +16,9 @@ Universitat Oberta de Catalunya
 
 Novembre de 2021
 
+===================================================================
 
-**Execució **
+**Execució**
 
 npm init --yes
 npm i express ejs-mate socket.io
