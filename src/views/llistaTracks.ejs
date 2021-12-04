@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <title>Llistat de tracks</title>    
+    <link rel="icon" href="./img/npn.ico">
+</head>
+<body>
+    <%- dataJS %> 
+
+<script>
+    //alert(itemList.length)
+    var i=0;
+    track="";
+    itemList.forEach( function (item) {
+        i++;
+        //console.log(item)
+        //console.log(i)
+            
+        track='('+itemList[i].coords[0]+','+itemList[i].coords[0]+')';
+        document.write(track);
+    })
+
+</script>
+
+</body>
+</html>

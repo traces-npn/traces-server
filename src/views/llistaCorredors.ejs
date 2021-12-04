@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">    
+    <title>Llistat de corredors</title>    
+    <link rel="icon" href="./img/npn.ico">
+</head>
+<body>
+    <%- dataJS %> 
+
+<script>
+    //alert(usuarisList.length)
+    var i=0;
+    usuarisList.forEach( function (item) {
+        i++;
+        //console.log(item)
+        //console.log(i)
+        //alert(item.nom);
+        document.write("<ul>"+i+" "+ item.dorsal+ " " + item.nom + " "+ item.cognoms+"</ul>"  )
+    })
+
+</script>
+
+</body>
+</html>
