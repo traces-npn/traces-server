@@ -50,7 +50,7 @@ dispositius.getDispositius();
 // En cas trobar-ne genera un fitxer amb el track de cada dispositiu sincronitzat 
 // components/carrega
 
-//tracks.carregaTracks();    
+tracks.carregaTracks();    
 
 
 // Crea els usuaris de prova
