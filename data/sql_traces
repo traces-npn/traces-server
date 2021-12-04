@@ -1,0 +1,63 @@
+CREATE TABLE geo_example
+(id serial, geodata jsonb);
+
+INSERT INTO geo_example (geodata) VALUES ('{
+    "type": "Feature",
+    "properties": {
+        "name": "Coors Field",
+        "amenity": "Baseball Stadium",
+        "popupContent": "This is where the Rockies play!"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [-104.99404, 39.75621]
+    }
+}');
+
+select * from geo_example
+SELECT geodata->'properties' AS props FROM geo_example;
+SELECT geodata->'geometry'->'coordinates' AS coords FROM geo_example;
+----
+
+select * from runners;
+drop table runners;
+CREATE TABLE runners (
+    runner_id serial PRIMARY KEY,
+    device_id int,
+    nom varchar(25) NOT NULL,
+    cognoms varchar (50) NOT NULL,
+    dorsal smallint NOT NULL UNIQUE
+);
+
+drop table points;
+create table if not exists points (    	
+	id bigserial NOT NULL,
+   	runner_id integer REFERENCES runners (runner_id),
+	geodata jsonb
+);	
+
+INSERT INTO points (geodata) VALUES ('{
+        "type":"Feature",
+        "geometry": {
+          "type":"Point","coordinates":[2.1222648,42.3862,2900]},
+        "properties":{
+          "id":9,
+          "time":"2021-11-17T22:34:16.000+00:00"
+        }
+}');									 
+
+select * from points
+SELECT geodata->'properties' AS props FROM points;
+SELECT geodata->'properties'->'time' AS props FROM points;
+SELECT geodata->'properties'->'id' AS props FROM points;
+SELECT geodata->'geometry'->'coordinates' AS coords FROM points;
+
+SELECT ST_AsGeoJSON('POINT(1 2)');
+
+SELECT ST_MakePoint(1.4, -3.7);
+
+SELECT ST_AsGeoJSON(t.*)
+FROM (VALUES
+  (1, 9, 'POINT(2.1222648 42.3862 3000) '::geometry)
+  )
+AS t(id, runner_id, geom);
