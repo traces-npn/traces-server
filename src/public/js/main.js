@@ -1,56 +1,56 @@
 // Codi JavaScript que es carrega al mapa principal a través de mostraMapa.ejs
 
 const puntPluviometre= [42.3906, 2.1242];
-const puntSortida=[42.39758, 2.15303];
+const puntNuria=[42.39758, 2.15303];
 const puntPuigmal=[42.38326, 2.11678]; 
 const puntPontCiment=[42.40028,2.14764];
-
 
 // Es mostra el mapa centrat al cima del Puigmal
 // Es determina la font del mapa 
 // S'establexi el zoom per defecte de 12 i el zoom màxim permés de 17
 //var map = L.map('map').setView([42.39758, 2.15303],12);
-var map = L.map('map').setView(puntPuigmal,13);
-map.options.maxZoom=17;
+//var map = L.map('map').setView(puntPuigmal,15);
+var map = L.map('map').setView(puntNuria,17);  // Centrat a Núria amb el zoom  màxim.
+map.options.maxZoom=20;
 
-const tileURL = 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png';
+//const tileURL = 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png';
+const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 L.tileLayer(tileURL).addTo(map);
 map.locate({enableHighAccuracy: true,
-            attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
+//dibuixaPuntsClau();
+dibuixaTrack(51, 'orange');
+//dibuixaTrack(16);
 
-dibuixaPuntsClau();
-//dibuixaTrackCursa();
-//dibuixaTracksDataBase();
-//dibuixaTracksOnline();
+dibuixaTrackCursa();
+dibuixaTracksDataBase();
+dibuixaTracksOnline();
 
+////////////////////////////////////////
+// Bloc de funcions 
+////////////////////////////////////////
 
 function dibuixaTracksOnline() {
-///
-var puntAnt='';
+  var posAnt = [];  // Array que contindrà la posició anterior de cada dispositiu per dibuixar les polilínies.
+
   trackList.forEach(element => {            
     (function myLoop(i) {         
       // Llegeix l'atribut id que identifica el dispositiu sincronitzat de cada corredor 
       var id=element;                                                    
-      
+    
       // Crida la funció de llegir la posició de cada dispositiu amb un delay de xxx milisegons.
       setTimeout(function() {	  
         // Crida la funció getPosition que obté les posicions de cada dispositiu i les registra
         // en format GeoJSON a la bdd a través de l'APIREST                   
         actualitzarPosicions(id)
-//        console.log(id)
-        //alert(id)
-
         if (--i) myLoop(i);         // Itera i mentre i > 0
-      }, 1000)                      // Milisegons d'espera
+      }, 1500)                      // Milisegons d'espera
     })(1000000);    // Quantitat de lectures 
   
   });
-
-}
-///
 
 function actualitzarPosicions(id) {
   
@@ -63,41 +63,49 @@ function actualitzarPosicions(id) {
     }
     var track='';
     fetch(url,options)
-        .then(response => response.json())
-        //.then(json => console.log(json))
+        .then(response => response.json())        
         .then(json => {                  
           let x=track=json[0].latitude;
           let y=track=json[0].longitude;
           let z=track=json[0].altitude;
-          let t=track=json[0].deviceTime;
-          let punt=puntGPX(x,y,z,t);          
+          let t=track=json[0].deviceTime;          
+                
+          var coords ="";
+          var aux=posAnt[trackList.indexOf(id)];
+          if (aux === undefined)  {
+            coords=`${x}, ${y},`;            
+          }
+          else {
+            coords=`${aux},`          
+          }
+          coords=coords+`${x}, ${y}`;
+          posAnt[trackList.indexOf(id)]=`${x}, ${y}`;
           
-          var gpx= `./tracks/track-${id}.gpx`;
+          //console.log(coords)
           
-          //var gpx=capGPX();
-          //gpx+=puntGPX(x,y,z,t);          
-          //gpx+=peuGPX
+          function coordArray(coordString) {
+            var coords = coordString.split(",")
+            var temp = coords.slice();
+            var arr = [];
+          
+            while (temp.length) {
+              arr.push(temp.splice(0,2));
+            }          
+            return arr;
+          }
 
-          var gpx='<trkseg>'+punt+ '</trkseg>'
-          console.log(id + ' - ' + gpx)
-          var g = new L.GPX(gpx, {  async: true,  parseElements: ['track'], polyline_options: {  color: 'red'  }  });
-          g.addTo(map);        
-          //const pos=[x, y];             
-          //var  marker = L.marker(pos).addTo(map)
-          //const d=0.0001;
-          //var latlngs = [[x-d, y-d],[x+d, y+d]];
-          //var polygon = L.polygon(latlngs, {color: 'blue'}).addTo(map);
-          //g.addTo(map);  
+          var coordsArray=coordArray(coords);          
+          var polyline = L.polyline(coordsArray, { weight: 3, color: 'green' });
+          polyline.addTo(this.map);
         } )        
-}
+  }
 
+}
 
 
 /*
 var svgElementBounds = [ [ 32, -130 ], [ 13, -100 ] ];
 L.svgOverlay(svgElement, svgElementBounds).addTo(map);
-
-
 */
 
 // Recupera els tracks enmmagatzemats i els mostra en el mapa.
@@ -109,7 +117,7 @@ function dibuixaTracksDataBase() {
   trackList.forEach( function (item) {
     
     var gpx= `./tracks/track-${item}.gpx`;
-    console.log(`Track: ${gpx}`)  
+    //console.log(`Track: ${gpx}`)  
     var g = new L.GPX(gpx, {  async: true,  parseElements: ['track'],  polyline_options: {    color: 'blue'  } });
 
    g.addTo(map);
@@ -142,10 +150,10 @@ function drawTrack(track) {
 
 
 
-function dibuixaTrackCursa() {
+function dibuixaTrack(id,color) {
    // Carrega el track de la cursa npn.gpx i el mostra en vermell sobre el mapa
-   var gpx = './tracks/npn.gpx';
-   var g = new L.GPX(gpx, {  async: true,  parseElements: ['track'], polyline_options: {  color: 'red'  }  });
+   var gpx = `./tracks/${id}.gpx`;
+   var g = new L.GPX(gpx, {  async: true,  parseElements: ['track'], polyline_options: {  color: color  }  });
    g.addTo(map);
  
  
@@ -165,9 +173,39 @@ function dibuixaTrackCursa() {
 
 }
 
+function dibuixaTrackCursa() {
+  // Carrega el track de la cursa npn.gpx i el mostra en vermell sobre el mapa
+  var gpx = './tracks/npn.gpx';
+  dibuixaTrackGPX(gpx)  
+}
+
+
+function dibuixaTrackGPX(gpx) {
+  // Dibuixa el track del fitxer gpx passat per paràmetre en vermell sobre el mapa
+  
+  var g = new L.GPX(gpx, {  async: true,  parseElements: ['track'], polyline_options: {  color: 'red'  }  });
+  g.addTo(map);
+
+
+  g.on('loaded', function(e) {
+      var gpx = e.target,
+        name = gpx.get_name(),
+        distM = gpx.get_distance(),
+        distKm = distM / 1000,
+        distKmRnd = distKm.toFixed(1),
+        eleGain = gpx.get_elevation_gain().toFixed(0),
+        eleLoss = gpx.get_elevation_loss().toFixed(0);
+        var info = "Track oficial: " + name + "</br>" +
+        "Distància: " + distKmRnd + " km </br>" +          
+        "Desnivell: " + eleGain + " m </br>"
+        gpx.getLayers()[0].bindPopup(info) //register popup on click
+  });
+
+}
+
 function dibuixaPuntsClau() {
   // Afegeix punt addicionals al track de la crusa, sobre el mapa     
-      paintPosition('1', puntSortida,'<h3>Punt de sortida</h3>Vall de Núria' );    
+      paintPosition('1', puntNuria,'<h3>Punt de sortida</h3>Vall de Núria' );    
       paintPosition('2', puntPluviometre,`<h3>Pluviòmatre</h3>Torrent de l'Embut` );    
       paintPosition('3', puntPuigmal,'<h3>Puigmal</h3>Control de cim' );    
       paintPosition('4', puntPontCiment,'<h3>Pont de ciment. Torrent de finestrelles</h3>No hi ha neu.' );    

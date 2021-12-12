@@ -1,36 +1,39 @@
 // Guarda els punts a la bdd de Traces a través de la pròpia API de Traces
 
-const http = require('http');
+const axios = require('axios')
 
 function setPunt(device_id, geojson) {   
-    const data = JSON.stringify({
+    const dades = JSON.stringify({
       "device_id": device_id,
       "geojson": geojson    
-    })
-  
-    const options = {
-      hostname: "localhost",
-      port: 3001,
-      path: '/punts',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
-    }
-   //console.log(geojson)
-    const req = http.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-  
-      res.on('data', d => {
-        process.stdout.write(d)        
-      })
-    })  
-    req.on('error', error => {
-      console.error(error)
-    })  
-    req.write(data)
-    req.end()
-   }
+    })   
 
- exports.setPunt = setPunt;
+  const config = {
+    method: 'POST',
+    url: 'http://localhost:3001/punts',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': dades.length
+    },
+    data: dades
+  }
+
+
+  const sendPostRequest = async () => {
+    try {
+        const resp = await axios(config);
+        console.log(resp.data);
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+        //console.log(err)
+    }
+  };
+  
+  sendPostRequest();
+ 
+}  
+
+
+
+exports.setPunt = setPunt;

@@ -45,7 +45,6 @@ crearUsuaris();
 
 dispositius.getDispositius();
 
-
 // Comproba a la bdd si hi ha tracks registrats 
 // En cas trobar-ne genera un fitxer amb el track de cada dispositiu sincronitzat 
 // components/carrega
@@ -53,14 +52,18 @@ dispositius.getDispositius();
 tracks.carregaTracks();    
 
 
+
 // Crea els usuaris de prova
 // Els usuaris han de coincidir amb els donats d'alta a traccar  (pendnet sincronitzar altes)
 function crearUsuaris() {
-    //usuaris.setUsuari(14, "Jaume","Casanovas",202);
-    //usuaris.setUsuari(20, "Pixel 3","Android", 203);
-    //usuaris.setUsuari(49, "Windos - Pixel 2","Android",201);  // Emulador windows ruta Pic d'Eina - Noufonts  id: 619502
-    //usuaris.setUsuari(16,"Pixel 4","Android",200);   // Emulador linux ruta Olla petita de Núria. id: 734242
-
+    
+    //usuaris.setUsuari(14, "Jaume","Casanovas",202);    
+    //usuaris.setUsuari(49, "Windos - Pixel 2","Android",201);  
+    //usuaris.setUsuari(16,"Pixel 4","Android",200);  
+    
+    //usuaris.setUsuari(50, "Pixel 3","Android", 203);
+    //usuaris.setUsuari(51, "51 - Pixel 3","Android", 204);    
+    //usuaris.setUsuari(52, "52 - Moto","", 210);
     //console.log(usuaris.getUsuaris());
     //usuaris.getUsuaris()
 }

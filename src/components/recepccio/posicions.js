@@ -5,6 +5,9 @@ const path = require('path');
 const http = require('http');
 const GeoJSON = require('geojson');    
 const punts = require('./punts');
+const { timeStamp } = require('console');
+
+const tracks = require('../carrega/carregaTracks');
 
 var posicio='';
 
@@ -17,12 +20,12 @@ const headers =  {
   "Authorization": "Basic YWRtaW46YWRtaW4="
 }
 
-function getPosition(n) {  
+function getPosition(id, i) {  
   var options = {
     "method": "GET",
     "hostname": hostname,
     "port": port,
-    "path": "/api/positions?deviceId="+n,    // S'afeix l'ID del dispositiu
+    "path": "/api/positions?deviceId="+ id,    // S'afeix l'ID del dispositiu
     "headers": headers    
   };
     
@@ -50,21 +53,26 @@ function getPosition(n) {
       //console.log("Posició: "+n);
       //console.log("Dispositiu ID:"+ deviceId);
       //console.log("Nivell de bateria: " +  batteryLevel )      
-  //console.log("lat: " + lat  + " lng: " + lng + " alt: " + alt + " time: " + time + " bateria: " + batteryLevel);				
+
+//      if(deviceId===51) {
+//        console.log(i+ " Device:" + deviceId+ " lat: " + lat  + " lng: " + lng + " alt: " + alt + " time: " + time + " bateria: " + batteryLevel);				
+      //}
+
       //console.log("------------------------------------");
 
       //track.push( {runner_id:n, lat:lat, lng:lng, time:time});
       //var pos = GeoJSON.parse(track[0], {Point: ['lat', 'lng']});
-      
+      var t=timeStamp;
       //posicio = GeoJSON.parse({runner_id:n, lat:lat, lng:lng, alt:alt, time:time, batteryLevel:batteryLevel}, {Point: ['lat', 'lng']});      
-      posicio = GeoJSON.parse({runner_id:n, lat:lat, lng:lng, alt:alt, time:time, batteryLevel:batteryLevel}, {Point: ['lat', 'lng', 'alt']});      
+      posicio = GeoJSON.parse({runner_id:id, lat:lat, lng:lng, alt:alt, time:time, batteryLevel:batteryLevel}, {Point: ['lat', 'lng', 'alt']}, {Temps: t});      
   //console.log(posicio)
       punts.setPunt(deviceId, posicio);
+      ///tracks.creaGPX(deviceId, posicio);  ==> Canviar-ho per una funció que escrigui en fitxer ???
   
   //  funcions.addFitxer(`data/track${n}.txt`,pos,`Track ${n} guardat`);                        
   //  funcions.addFitxer(`data/track${n}_max.txt`,jsonParsed[0],`Track ${n} guardat`);                  
-       
-    });
+      
+    }); 
   });
   req.end();
  }

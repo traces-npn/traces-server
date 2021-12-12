@@ -7,89 +7,88 @@ const { normalize } = require('path');
 const hostname = "localhost";
 const port = "3001";
 const path_tracks="./src/public/tracks/";
-const path_tracks_dat=path_tracks+'tracks.dat';
 
 // Recupera els tracks de tots els corredors de la bdd i genera un fitxer .gpx
 
 function carregaTracks() {  
-  
+  var tracks=[];
   var options = {
     "method": "GET",
     "hostname": hostname,
     "port": port,
     "path": "/users"
   };
-  
+
   const req = http.request( options, function (res) {        
-  const chunks = [];  
-  var tracks=[];
+  const chunks = [];
   res.on("data", function (chunk) {
        chunks.push(chunk);	
   });
   res.on("end", function () {
       const data = Buffer.concat(chunks);
       var resposta = JSON.parse(data);
-      // Crea el fitxer de tracks en blanc
-      crearFitxer(path_tracks_dat,'') 
       // Recupera la llista d'usuaris i itera per cadascun.  
       resposta.forEach(element => {
-          // Crea un fitxer GPX per cada dispositiu
-          tracks=creaGPX(element.device_id)                    
-          // Escriu un fitxer amb els id dels tracks guardats
-          addFitxer(path_tracks_dat,element.device_id)  
-      });       
+            //console.log(resposta)          
 
-//      let txt="";
-//      tracks.forEach(element => txt+=`${element}\r\n`);     
-//      crearFitxer(path_tracks+'tracks.dat', txt.slice(0, -2))              
-
-    });
-  });      
-    req.end()      
-  }
-
-  function creaGPX(device_id, pos) {  
-    var tracks=[];
-    var uri=path_tracks+'track-'+device_id+'.gpx'
-    tracks.push(device_id)
-
+            var uri=path_tracks+'track-'+element.device_id+'.gpx'
+            tracks.push(element.device_id)
             // Guarda les urls dels fitxer dels tracks generats            
+
+
             // La funció promesaTrack utilitza Promise amb un retard de 150ms per assegurar que l'xml 
             // del fitxer del track es monta amb l'odre correcte esperant, sense bloqueigs, la fi de les 
             // funcions de crear la capçalera, afegir els punts i finalment tancar l'xml.
             // L'ordre d'execució de les funcions ha de ser:
-            //crearGpxTrack(uri, device_id)                     
-            //afegirPuntsTrack(uri, device_id)
+            //crearGpxTrack(uri, element.device_id)                     
+            //afegirPuntsTrack(uri, element.device_id)
             //tancarGpxTrack(uri)
                
             function promesaTrack(msg) {
               return new Promise((resolve, reject) => {
                 setTimeout(
                   () => {
+  //console.log(msg);
                     resolve();
                   }, 1500);      
               });
             }
           
-            //console.log('Inici')            
+            //console.log('Inici')
             promesaTrack("Inici")
             .then(() => { 
-              crearGpxTrack(uri, device_id)           // Crea el fitxer GPX amb la capçalera del track de cada dispositiu                            
+              crearGpxTrack(uri, element.device_id)           // Crea el fitxer GPX amb la capçalera del track de cada dispositiu                            
               return promesaTrack('Inici track: '+ uri );
              })
             .then(() => { 
-              //console.log(pos)
-              afegirPuntsTrack(uri, device_id, pos)        // Afegeix les línies de les coordenades al fitxer GPX
+              afegirPuntsTrack(uri, element.device_id)        // Afegeix les línies de les coordenades al fitxer GPX
               return promesaTrack('Punts track: ' + uri );
              })
              .then(() => { 
               tancarGpxTrack(uri)                             // Afegeix els tags de tancament de track al fitxer GPX
               return promesaTrack('Tancant track: ' + uri);
-             })            
-            .catch(() => { console.log('error'); } );      
+             })
+            
+            .catch(() => { console.log('error'); } );
 
-  return tracks;
-}
+          
+        });       
+
+        // Escriu un fitxer amb els id dels tracks guardats a l'array tracks
+        let txt="";
+//        tracks.forEach(element => txt+=`./tracks/track-${element}.gpx\r\n`);     
+        tracks.forEach(element => txt+=`${element}\r\n`);     
+
+        crearFitxer(path_tracks+'tracks.dat', txt.slice(0, -2))        
+        //crearFitxerSync(path_tracks+'tracks.dat', txt.slice(0, -2))        
+
+
+      });
+    });      
+    req.end()  
+
+    return tracks; 
+  }
 
 
 
@@ -103,33 +102,32 @@ function tancarGpxTrack(file) {
 
 // Recuperar els punts desats a la bdd dels tracks del dispositiu passat per paràmetre i els escriu al fitxer del track.
 function afegirPuntsTrack(uri, device_id) {   
-  
-    var options = {
-      "method": "GET",
-      "hostname": hostname,
-      "port": port,
-      "path": "/tracks/"+device_id,
-      "headers": {
-        "Content-Length": "0"
-      }
-    };
-    //console.log(uri)
-    //console.log(options.path)
-    const req = http.request( options, function (res) {        
-      const chunks = [];
-        res.on("data", function (chunk) {
-          chunks.push(chunk);	
-        });
-        res.on("end", function () {        
-          const data = Buffer.concat(chunks);      
-          var resposta = JSON.parse(data);        
-          // Recorre tots els punts del dispositiu guardats a la taula de punts    
-          resposta.forEach(element => {               
-            addFitxerSync(uri, puntGPX(element.coords[1],element.coords[0], element.alt, element.temps ));          
-          });                 
-        });
-      });      
-      req.end()  
+  var options = {
+    "method": "GET",
+    "hostname": hostname,
+    "port": port,
+    "path": "/tracks/"+device_id,
+    "headers": {
+      "Content-Length": "0"
+    }
+  };
+  //console.log(uri)
+  //console.log(options.path)
+  const req = http.request( options, function (res) {        
+    const chunks = [];
+      res.on("data", function (chunk) {
+        chunks.push(chunk);	
+      });
+      res.on("end", function () {        
+        const data = Buffer.concat(chunks);      
+        var resposta = JSON.parse(data);        
+        // Recorre tots els punts del dispositiu guardats a la taula de punts    
+        resposta.forEach(element => {                         
+          addFitxerSync(uri, puntGPX(element.coords[1],element.coords[0], element.alt, element.temps ));          
+        });                 
+      });
+    });      
+    req.end()  
   }
 
 function puntGPX(x,y,z,t) {  
@@ -200,7 +198,8 @@ function addFitxerSync(file, data){
   const fs = require('fs');
   var fileContent = JSON.parse(JSON.stringify(data));
  
-  //var stream = fs.createWriteStreamSync(file, {'flags': 'a'});  
+  //var stream = fs.createWriteStreamSync(file, {'flags': 'a'});
+  
   fs.appendFileSync(file, fileContent, function (err) {
     if(err){
       return  console.log(err);
@@ -212,4 +211,3 @@ function addFitxerSync(file, data){
 
 
  exports.carregaTracks = carregaTracks;
- exports.creaGPX = creaGPX;
