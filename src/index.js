@@ -4,7 +4,7 @@ const path = require('path');
 const http = require('http');
 
 const dispositius = require('./components/recepccio/dispositius');
-const usuaris = require('./components/usuaris');
+const usuaris = require('./components/usuaris/usuaris');
 const tracks = require('./components/carrega/carregaTracks');
 
 
