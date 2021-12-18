@@ -1,32 +1,22 @@
 // Recupera les posiscions dels dispositius sincronitzats
 // l'ID del dispositiu es recepciona pel paràmetre n de getPosition(n)
-
-const path = require('path');
 const http = require('http');
 const GeoJSON = require('geojson');    
 const punts = require('./punts');
 const { timeStamp } = require('console');
 
-const tracks = require('../carrega/carregaTracks');
-
 var posicio='';
 
-// Assigna les constants 
-const hostname = "localhost";
-const port = "8082";
-const headers =  {
-  "cookie": "JSESSIONID=node01kpp1w0pwm3xb17ybqhyud6svt1.node0",
-  "Content-Length": "0",
-  "Authorization": "Basic YWRtaW46YWRtaW4="
-}
+// Carrega les constants definides al fitxer de configuració de traccar
+const traccar = require('../../config/api_tracar.js');
 
 function getPosition(id, i) {  
   var options = {
     "method": "GET",
-    "hostname": hostname,
-    "port": port,
+    "hostname": traccar.hostname,
+    "port": traccar.port,
     "path": "/api/positions?deviceId="+ id,    // S'afeix l'ID del dispositiu
-    "headers": headers    
+    "headers": traccar.headers    
   };
     
   const req = http.request(options, function (res) {            
@@ -56,21 +46,18 @@ function getPosition(id, i) {
 
 //      if(deviceId===51) {
 //        console.log(i+ " Device:" + deviceId+ " lat: " + lat  + " lng: " + lng + " alt: " + alt + " time: " + time + " bateria: " + batteryLevel);				
-      //}
+//    }
 
       //console.log("------------------------------------");
 
       //track.push( {runner_id:n, lat:lat, lng:lng, time:time});
       //var pos = GeoJSON.parse(track[0], {Point: ['lat', 'lng']});
-      var t=timeStamp;
-      //posicio = GeoJSON.parse({runner_id:n, lat:lat, lng:lng, alt:alt, time:time, batteryLevel:batteryLevel}, {Point: ['lat', 'lng']});      
-      posicio = GeoJSON.parse({runner_id:id, lat:lat, lng:lng, alt:alt, time:time, batteryLevel:batteryLevel}, {Point: ['lat', 'lng', 'alt']}, {Temps: t});      
-  //console.log(posicio)
+      var t=timeStamp;      
+      posicio = GeoJSON.parse({runner_id:id, lat:lat, lng:lng, alt:alt, time:time, batteryLevel:batteryLevel}, {Point: ['lat', 'lng', 'alt']}, {Temps: t});        
       punts.setPunt(deviceId, posicio);
       ///tracks.creaGPX(deviceId, posicio);  ==> Canviar-ho per una funció que escrigui en fitxer ???
-  
-  //  funcions.addFitxer(`data/track${n}.txt`,pos,`Track ${n} guardat`);                        
-  //  funcions.addFitxer(`data/track${n}_max.txt`,jsonParsed[0],`Track ${n} guardat`);                  
+      //  funcions.addFitxer(`data/track${n}.txt`,pos,`Track ${n} guardat`);                        
+      //  funcions.addFitxer(`data/track${n}_max.txt`,jsonParsed[0],`Track ${n} guardat`);                  
       
     }); 
   });
