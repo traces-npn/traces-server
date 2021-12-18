@@ -1,25 +1,30 @@
 // Codi JavaScript que es carrega al mapa principal a través de mostraMapa.ejs
 
+//const { response } = require("express");
+
 const puntPluviometre= [42.3906, 2.1242];
 const puntNuria=[42.39758, 2.15303];
 const puntPuigmal=[42.38326, 2.11678]; 
 const puntPontCiment=[42.40028,2.14764];
 
-// Es mostra el mapa centrat al cima del Puigmal
+// Es mostra el mapa centrat al cim del Puigmal
 // Es determina la font del mapa 
-// S'establexi el zoom per defecte de 12 i el zoom màxim permés de 17
+// S'establexi el zoom per defecte de 12 i el zoom màxim permès.
 //var map = L.map('map').setView([42.39758, 2.15303],12);
 //var map = L.map('map').setView(puntPuigmal,15);
-var map = L.map('map').setView(puntNuria,17);  // Centrat a Núria amb el zoom  màxim.
+var map = L.map('map').setView(puntPuigmal,15); 
 map.options.maxZoom=20;
 
-//const tileURL = 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png';
-const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tileURL = 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png';
+//const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 L.tileLayer(tileURL).addTo(map);
+
+/*
 map.locate({enableHighAccuracy: true,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
+*/
 
 //dibuixaPuntsClau();
 dibuixaTrack(51, 'orange');
@@ -35,7 +40,6 @@ dibuixaTracksOnline();
 
 function dibuixaTracksOnline() {
   var posAnt = [];  // Array que contindrà la posició anterior de cada dispositiu per dibuixar les polilínies.
-
   trackList.forEach(element => {            
     (function myLoop(i) {         
       // Llegeix l'atribut id que identifica el dispositiu sincronitzat de cada corredor 
@@ -51,6 +55,7 @@ function dibuixaTracksOnline() {
     })(1000000);    // Quantitat de lectures 
   
   });
+  
 
 function actualitzarPosicions(id) {
   
@@ -62,6 +67,7 @@ function actualitzarPosicions(id) {
         }
     }
     var track='';
+
     fetch(url,options)
         .then(response => response.json())        
         .then(json => {                  
@@ -82,7 +88,7 @@ function actualitzarPosicions(id) {
           posAnt[trackList.indexOf(id)]=`${x}, ${y}`;
           
           //console.log(coords)
-          
+          // Funció per muntar l'array de coordenades en el foramt polyline
           function coordArray(coordString) {
             var coords = coordString.split(",")
             var temp = coords.slice();
@@ -97,16 +103,21 @@ function actualitzarPosicions(id) {
           var coordsArray=coordArray(coords);          
           var polyline = L.polyline(coordsArray, { weight: 3, color: 'green' });
           polyline.addTo(this.map);
-        } )        
+          
+          //paintPosition(id,`[${x}, ${y}]`)
+
+          //var  marker = L.marker(pos)
+          var esquiadorIcon = new Icon({iconUrl: '/img/esquiador.png'});
+	        var icona = L.marker(pos, {icon: esquiadorIcon}).bindPopup(desc).addTo(map);
+	
+
+
+        } )   
+    
   }
 
 }
 
-
-/*
-var svgElementBounds = [ [ 32, -130 ], [ 13, -100 ] ];
-L.svgOverlay(svgElement, svgElementBounds).addTo(map);
-*/
 
 // Recupera els tracks enmmagatzemats i els mostra en el mapa.
 // La llista dels tracks a mostrar s'extreu de l'array trackList 
@@ -226,11 +237,29 @@ function _paintPosition(n,lat, lng, desc)
 
 function paintPosition(n,pos, desc)    
 {
-  console.log("Dibuixant waypoint: ", n + " - " + desc);
-   //const pos=[lat, lng];   
+  //console.log("Dibuixant waypoint: ", n + " - " + desc);
+  /*
+   //const pos=[lat, lng];      
    var  marker = L.marker(pos)
    .addTo(map)
    .bindPopup(desc)  
+   */
+  
+  var Icon = L.Icon.extend({
+		options: {
+			//shadowUrl: '/img/esquiador-shadow.png',
+			iconSize:     [80, 80],
+			//shadowSize:   [40, 40],
+			iconAnchor:   [40, 40],
+			//shadowAnchor: [40, 0],
+			popupAnchor:  [-3, -76]
+		}
+	});
+
+	var esquiadorIcon = new Icon({iconUrl: '/img/esquiador.png'});
+	
+	var icona = L.marker(pos, {icon: esquiadorIcon}).bindPopup(desc).addTo(map);
+	
 }
 
 
