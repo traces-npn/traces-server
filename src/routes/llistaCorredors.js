@@ -7,7 +7,7 @@ const path = require('path');
 const hostname = "localhost";
 const port = "3001";
 
-const usuaris = require('../components/usuaris');
+const usuaris = require('../components/usuaris/usuaris');
 
 //////////////////
 var options = {
