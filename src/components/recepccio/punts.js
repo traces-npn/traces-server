@@ -1,6 +1,8 @@
-// Guarda els punts a la bdd de Traces a través de la pròpia API de Traces
+// Guarda els punts a la bdd de Traces a través de l'API de Traces
 
 const axios = require('axios')
+
+// Carrega les constants definides al fitxer de configuració de traccar
 const api_traces = require('../../config/api_traces.js');
 
 function setPunt(device_id, geojson) {   
@@ -17,6 +19,7 @@ function setPunt(device_id, geojson) {
       'Content-Type': 'application/json',
       'Content-Length': dades.length
     },
+    proxy: false,
     data: dades
   }
 
@@ -24,7 +27,7 @@ function setPunt(device_id, geojson) {
   const sendPostRequest = async () => {
     try {
         const resp = await axios(config);
-        console.log(resp.data);
+        //console.log(resp.data);
     } catch (err) {
         // Handle Error Here
         console.error(err);

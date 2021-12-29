@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    
+<head>    
     <meta charset="UTF-8">    
     <title>Llistat de corredors</title>    
     <link rel="icon" href="./img/npn.ico">
 </head>
+
+<link rel="stylesheet" href="/css/main.css">
+
 <body>
-    <%- dataJS %> 
+<%- dataJS %> 
+
+<div id="capa"></div>
+
+<script src="/js/moment-with-locales.js"></script>    
+<script src="/js/traces.properties"></script>
+<script src="/js/classificacions.js"></script>
 
 <script>
-    //alert(usuarisList.length)
-    var i=0;
-    usuarisList.forEach( function (item) {
-        i++;
-        //console.log(item)
-        //console.log(i)
-        //alert(item.nom);
-        document.write("<ul>"+i+" "+ item.dorsal+ " " + item.nom + " "+ item.cognoms+"</ul>"  )
-    })
-
+    dibuixaClassificats(false);                
 </script>
 
 </body>

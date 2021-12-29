@@ -17,7 +17,7 @@ var options = {
   "method": "GET",
   "hostname": hostname,
   "port": port,
-  "path": "/users"
+  "path": "/runners"
 };
 
   const req = http.request( options, function (res) {        

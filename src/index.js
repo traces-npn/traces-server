@@ -7,7 +7,6 @@ const dispositius = require('./components/recepccio/dispositius');
 const usuaris = require('./components/usuaris/usuaris');
 const tracks = require('./components/carrega/carregaTracks');
 
-
 // Inicialitzacions
 const app = express();
 const server = http.Server(app);
@@ -35,7 +34,7 @@ app.use('/prova',       require('./routes/prova.js'));
 // Abans de crear usuaris s'han de borrar les taules runners i points 
 // i deixar comentades les línies de getDispositius() i carregaTracks()
 
-crearUsuaris(); 
+
 
 // Obté els dispositius sincronitzats i inicia la recepcció de posicions
 // desant en bdd els tracks de cada dispositiu 
@@ -43,29 +42,37 @@ crearUsuaris();
 // Per iniciar la recepció de posicions cal iniciar el server de trackar
 // i revisar els dispositius sincronitzats.
 
+/*
+// Funcions d'eliminació i càrrega dels dispositius
+dispositius.resetDispositius();
+setTimeout(() => {
+    usuaris.setDispositiusRunners();        
+}, 5000);
+*/
+
 dispositius.getDispositius();
 
 // Comproba a la bdd si hi ha tracks registrats 
 // En cas trobar-ne genera un fitxer amb el track de cada dispositiu sincronitzat 
 // components/carrega
 
-tracks.carregaTracks();    
-
+//tracks.carregaTracks();    
 
 
 // Crea els usuaris de prova
 // Els usuaris han de coincidir amb els donats d'alta a traccar  (pendnet sincronitzar altes)
-function crearUsuaris() {
+function creaUsuaris() {
     
-    //usuaris.setUsuari(14, "Jaume","Casanovas",202);    
-    //usuaris.setUsuari(49, "Windos - Pixel 2","Android",201);  
-    //usuaris.setUsuari(16,"Pixel 4","Android",200);  
-    
-    //usuaris.setUsuari(50, "Pixel 3","Android", 203);
-    //usuaris.setUsuari(51, "51 - Pixel 3","Android", 204);    
-    //usuaris.setUsuari(52, "52 - Moto","", 210);
-    //console.log(usuaris.getUsuaris());
-    //usuaris.getUsuaris()
+    //usuaris.setUsuari(14, "Jaume","Casanovas",14);    
+    /*
+    usuaris.setUsuari(49, "Window - Pixel 2","Android",16);      
+    usuaris.setUsuari(16, "16 - Pixel 4","", 49);      
+
+    usuaris.setUsuari(50, "50 - Pixel 3","", 51);
+    usuaris.setUsuari(51, "51 - Pixel 3","", 50);        
+
+    usuaris.setUsuari(52, "52 - Motorola","", 52);
+    */
 }
 
 // Publicació de la carpeta del servidor “public”

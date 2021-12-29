@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./img/npn.ico">
     <title>Traces NPN - Cursa popular Núria Puigmal Núria</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="icon" href="./img/npn.ico">
 
+    <!-- https://github.com/unbam/Leaflet.SlideMenu -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/L.Control.SlideMenu.css">
+    
 </head>
 <body>
     <!-- Recupera les dades passades des de /routes/mostrarMapa.js amb res.render     
@@ -18,8 +22,9 @@
 <script>
     //alert(cadJS)   
 </script>
-    <div id="map"></div>
 
+<div id="map"></div>
+<div id="crono"></div>
     <!--
     /* @preserve
     * Leaflet 1.7.1, a JS library for interactive maps. http://leafletjs.com
@@ -32,8 +37,7 @@
     -->
     
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-    
-
+    <script src="/js/L.Control.SlideMenu.js"></script>        
     <!-- 
     /**
     * Copyright (C) 2011-2012 Pavel Shramov
@@ -42,14 +46,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>    
     -->
     <script src="/js/gpx.js"></script>
-        
+
+    <script src="/js/moment-with-locales.js"></script>    
     
     <!--  Revisar importació de geojson
     <script src="https://cdnjs.cloudflare.com/ajax/libs/geojson/0.5.0/geojson.min.js"></script>
     <script src="/js/geojson.js"></script> 
      -->
-
+    
+    
+    <script src="/js/traces.properties"></script>
+    
+    <script src="/js/tracksOnLine.js"></script>
+    <script src="/js/tracksFitxers.js"></script>
+    <script src="/js/tracksDataBase.js"></script>    
+    <script src="/js/classificacions.js"></script>
     <script src="/js/main.js"></script>
+
+
 
 </body>
 </html>
