@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="/css/main.css">
 
     <!-- https://github.com/unbam/Leaflet.SlideMenu -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">    
+    -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/L.Control.SlideMenu.css">
     
 </head>
@@ -25,6 +29,18 @@
 
 <div id="map"></div>
 <div id="crono"></div>
+<div id="link">   
+    <div class="leaflet-control-slidemenu leaflet-bar leaflet-control">
+        <a href="/corredors" target="_new" class="leaflet-bar-part leaflet-bar-part-single" title="Finestra nova">
+           <span class="fa fa-external-link">   </span>
+        </a>
+    </div>
+   
+ </div>
+
+ <!--  <a href="/corredors" class="fa fa-external-link"  target="_new"></a>      --->
+
+
     <!--
     /* @preserve
     * Leaflet 1.7.1, a JS library for interactive maps. http://leafletjs.com
@@ -37,7 +53,7 @@
     -->
     
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-    <script src="/js/L.Control.SlideMenu.js"></script>        
+    <script src="/lib/L.Control.SlideMenu.js"></script>        
     <!-- 
     /**
     * Copyright (C) 2011-2012 Pavel Shramov
@@ -45,17 +61,17 @@
     * All Rights Reserved.
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>    
     -->
-    <script src="/js/gpx.js"></script>
+    <script src="/lib/gpx.js"></script>
 
-    <script src="/js/moment-with-locales.js"></script>    
+    <script src="/lib/moment-with-locales.js"></script>    
     
     <!--  Revisar importació de geojson
     <script src="https://cdnjs.cloudflare.com/ajax/libs/geojson/0.5.0/geojson.min.js"></script>
-    <script src="/js/geojson.js"></script> 
+    <script src="/lib/geojson.js"></script> 
      -->
     
     
-    <script src="/js/traces.properties"></script>
+    <script src="/config/traces.properties"></script>
     
     <script src="/js/tracksOnLine.js"></script>
     <script src="/js/tracksFitxers.js"></script>
