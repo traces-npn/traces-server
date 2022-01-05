@@ -14,7 +14,7 @@ Universitat Oberta de Catalunya
 **Professor responsable de l’assignatura**: Antoni Pérez Navarro
 
 
-Novembre de 2021
+Gener de 2022
 
 
 
