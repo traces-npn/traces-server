@@ -28,3 +28,18 @@ npm install nodemon -D
 npm run dev
 
 http://localhost:3000/
+
+
+
+npm init --yes
+npm i express ejs-mate socket.io
+node src/index.js
+npm install nodemon -D
+npm run dev
+
+npm start
+
+
+Matar processos oberts
+lsof -i tcp:3000
+kill -9 <PID>
