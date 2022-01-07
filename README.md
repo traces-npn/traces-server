@@ -16,28 +16,30 @@ Universitat Oberta de Catalunya
 
 Gener de 2022
 
+**Condicions prèvies:**
+Abans d'executar el projecte Traces Server i Traces Web, cal intal·lar la base de dades i executar el projecte Traces API
 
+**Instal·lar les llibreries utilitzades:**
+Des de la carpeta arrel de l’aplicació, executar:
 
+npm install
 
-**Execució**
+**Execució de l'aplicació Traces Server**
 
-npm init --yes
-npm i express ejs-mate socket.io
 node src/index.js
-npm install nodemon -D
-npm run dev
-
-http://localhost:3000/
-
-
-
-npm init --yes
-npm i express ejs-mate socket.io
-node src/index.js
-npm install nodemon -D
-npm run dev
-
 npm start
+
+En mode desenvolupador:
+
+Aquesta opció permet executar l’aplicació per realitzar canvis en calent, sense haver de tornar a iniciar l’aplicació a cada modificació.
+
+node src/index.js
+npm install nodemon -D
+npm run dev
+
+
+**Execució de l'aplicació Traces Web:**
+http://localhost:3000/
 
 
 Matar processos oberts
